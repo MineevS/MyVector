@@ -8,8 +8,9 @@ MyVector::MyVector()
 	
 }
 */
+
 //+
-MyVector::MyVector(size_t size, ResizeStrategy ResizeStrategyK, float coef)//+  Конструктор (c 3 параметрами)(по умолчанию).
+MyVector::MyVector(size_t size, ResizeStrategy ResizeStrategyK, float coef)// Конструктор (c 3 параметрами)(по умолчанию).
 {
 	this->_size = size;
 	
@@ -37,8 +38,9 @@ MyVector::MyVector(size_t size, ResizeStrategy ResizeStrategyK, float coef)//+  
 		this->_data = new ValueType[this->_capacity]();
      }  
 }
+
 //+
-MyVector::MyVector(size_t size, ValueType value, ResizeStrategy ResizeStrategyK, float coef)//+
+MyVector::MyVector(size_t size, ValueType value, ResizeStrategy ResizeStrategyK, float coef)
 {
 	this->_size = size;
 	
@@ -72,7 +74,8 @@ MyVector::MyVector(size_t size, ValueType value, ResizeStrategy ResizeStrategyK,
 	}
 }
 
-MyVector::MyVector(const MyVector& copy)//+
+//+
+MyVector::MyVector(const MyVector& copy)
 {
 	this->_size = copy._size;
 	
@@ -82,32 +85,35 @@ MyVector::MyVector(const MyVector& copy)//+
 	
 	this->_data = new ValueType[this->_capacity];//массив не занулен.
 	
-	
 	for(size_t i = 0; i < this->_size; i++)
 	{
-		this->_data[i] = copy._data[i];//+
+		this->_data[i] = copy._data[i];
 	}
 }
 
-MyVector& MyVector::operator=(const MyVector& copy)//+-
+//+
+MyVector& MyVector::operator=(const MyVector& copy)//
 {
-	if(this->_capacity - this->_size >= copy._size)//+
+	if(this->_capacity - this->_size >= copy._size)//
 	{
 		for(size_t i = this->_size + 1; i < this->_size + copy._size; i++)
 		{
 			this->_data[i] = copy._data[i - (this->_size + 1)];
 		}
 	}
-	else if(this->_capacity - this->_size < copy._size)//+-
+	else if(this->_capacity - this->_size < copy._size)//
 	{
 		while(!(this->_capacity - this->_size >= copy._size))
 		{
-			this->_capacity = this->_coef * this->_capacity;//*
+			this->_capacity = this->_coef * this->_capacity;
 		}
 		    ValueType *temp = this->_data;
-            this->_data = new ValueType[this->_capacity];
-            memcpy(this->_data, temp, this->_size * sizeof(ValueType));
-            delete[] temp;
+            
+			this->_data = new ValueType[this->_capacity];
+           
+		   memcpy(this->_data, temp, this->_size * sizeof(ValueType));
+            
+			delete[] temp;
 			
 		for(size_t i = this->_size + 1; i < (this->_size + copy._size); i++)
 		{
@@ -142,16 +148,14 @@ float MyVector::loadFactor()//+
 
 char Error_index()//+
 {
-	cout << "ERROR_INDEX";//
-	//return "ERROR_INDEX";
+	cout << "ERROR_INDEX";
 }
 
 ValueType MyVector::operator[](const size_t i) const //+
 {
 	if((i > _size) ||( i < 0))
     {
-        Error_index(); //?
-		//return Error_index();
+        Error_index(); //
     }
     else
     {
@@ -333,14 +337,17 @@ void MyVector::shrink_fit()//+
 {
     float load_factor = this->loadFactor();
 
-    if ( load_factor < 0.5f)
+    if (load_factor < 0.25f)
     {
-        this->_capacity = this->_size;
+        this->_capacity = 0.5 * this->_capacity;//
 
         ValueType *temp = this->_data;
-        this->_data = new ValueType[this->_capacity];
-        memcpy(this->_data, temp, this->_size * sizeof(ValueType));
-        delete[] temp;
+        
+		this->_data = new ValueType[this->_capacity];
+       
+		memcpy(this->_data, temp, this->_size * sizeof(ValueType));
+        
+		delete[] temp;
     }
 }
 
