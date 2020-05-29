@@ -4,6 +4,7 @@
 
 #include <iostream>
 #include <cstring>
+#include <cassert>
 #include <iterator>
 #include <cmath>
 
@@ -14,7 +15,8 @@ enum class ResizeStrategy {
 	Additive,
 	Multiplicative
 };
-//
+
+// стратегия сортировки вектора.
 enum class SortedStrategy {
 	increasing, //Возрастание.
 	decreasing //Убывание.
@@ -29,18 +31,19 @@ class MyVector
 	private:
 	
 		ValueType* _data; // Указатель на массив _data.
-		size_t _size;	// Длина массива.
-		size_t _capacity; //
-		float _coef;
+		size_t _size;	// Используемая память в векторе.
+		size_t _capacity; // Зарезервированная память в векторе.
+		float _coef; // Коэфициент соотношения зарезервированной памяти вектора к используемой памяти.
 		ResizeStrategy _ResizeStrategy;
 	
 	public:
 	
 		//MyVector();//
-		MyVector(size_t size = 0, ResizeStrategy ResizeStrategyK = ResizeStrategy::Multiplicative, float coef = 1.5f); //+// Конструктор (без параметров)(по умолчанию).
+		MyVector(size_t size = 0, ResizeStrategy ResizeStrategyK = ResizeStrategy::Multiplicative, float coef = 1.5f); //+ // Конструктор (без параметров)(по умолчанию).
 		MyVector(size_t size, ValueType value, ResizeStrategy ResizeStrategyK = ResizeStrategy::Multiplicative, float coef = 1.5f);//+
 	
 		MyVector(const MyVector& copy);//+
+		
 		MyVector& operator=(const MyVector& copy);//+
 
 		~MyVector();//-
@@ -53,7 +56,8 @@ class MyVector
 
 		// доступ к элементу, 
 		// должен работать за O(1)
-		ValueType operator[](const size_t i) const;
+		ValueType& operator[](const size_t i);
+		const ValueType& operator[](const size_t i) const;
 
 		// добавить в конец,
 		// должен работать за amort(O(1))
@@ -83,7 +87,7 @@ class MyVector
 		// изменить размер
 		// если новый размер больше текущего, то новые элементы забиваются дефолтными значениями
 		// если меньше - обрезаем вектор
-		void resize(const size_t size, const ValueType value);
+		void resize(const size_t size, const ValueType = 0.0);
 
 		// очистка вектора, без изменения capacity
 		void clear();
